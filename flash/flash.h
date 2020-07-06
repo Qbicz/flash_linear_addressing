@@ -1,3 +1,8 @@
+#ifndef __FLASH_H__
+#define __FLASH_H__
+
+#include <stdint.h>
+
 // You have simplified flash region here:
 #define PAGE_SIZE 2048U
 
@@ -32,6 +37,11 @@ typedef enum ErrorCode_type
  */
 typedef void (*FlashDriverCallback)(ErrorCode_t code);
 
+typedef struct FlashControlBlock_type
+{
+    FlashDriverCallback callback; ///< Function called after flash operation has finished
+} Flash_t;
+
 /**
  * @brief Initialize module async
  * @param callback Called when operation finished resulting in appropriate error code.
@@ -56,3 +66,5 @@ ErrorCode_t FlashDriver_Write(uint32_t page_number, S_Array_t data, FlashDriverC
  * The module shall be synchronous ( blocking ). Please provide small example of such module usage. Please keep it simple.
  * You may use C11.
  */
+
+#endif /* __FLASH_H__ */
