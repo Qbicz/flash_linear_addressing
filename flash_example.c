@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "flash/flash.h"
+#include "flash_driver/flash_driver.h"
 
 void user_callback(ErrorCode_t code)
 {
@@ -13,7 +13,7 @@ int main(void)
     // printf only used for demo/testing purpose, on microcontroller disable stdio.h and use dedicated logging
     printf("Flash example start\n");
 
-    uint32_t page_number = 0;
+    uint32_t page_number = 12;
     S_Array_t data_to_write = {0};
 
     FlashDriver_Init(user_callback);
