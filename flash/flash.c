@@ -9,7 +9,10 @@ static Flash_t flash;
 
 void FlashDriver_Init(FlashDriverCallback callback)
 {
-    flash.callback = callback;
+    if (callback)
+    {
+        flash.callback = callback;
+    }
 }
 
 /**
@@ -20,5 +23,17 @@ void FlashDriver_Init(FlashDriverCallback callback)
  */
 ErrorCode_t FlashDriver_Write(uint32_t page_number, S_Array_t data, FlashDriverCallback callback)
 {
+    if (flash.pending)
+    {
+       return PENDING;
+    }
+
+    flash.pending = true;
+
+    // write data
+
     flash.callback(SUCCESS);
+    flash.pending = false;
+
+    return SUCCESS;
 }

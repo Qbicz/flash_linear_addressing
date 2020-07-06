@@ -2,6 +2,7 @@
 #define __FLASH_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 // You have simplified flash region here:
 #define PAGE_SIZE 2048U
@@ -40,6 +41,7 @@ typedef void (*FlashDriverCallback)(ErrorCode_t code);
 typedef struct FlashControlBlock_type
 {
     FlashDriverCallback callback; ///< Function called after flash operation has finished
+    bool pending;
 } Flash_t;
 
 /**
