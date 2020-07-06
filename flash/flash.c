@@ -8,11 +8,9 @@ _Atomic(bool) driver_busy = ATOMIC_VAR_INIT(false);
 
 void UserCallback(ErrorCode_t code)
 {
-    // Note: Called from separate context.
-
     printf("callback: error code %d\n", code);
 
-    // set a flag to indicate operation done
+    // Driver operation finished
     atomic_flag_clear(&driver_busy);
 }
 
@@ -22,9 +20,7 @@ void FlashInit()
     FlashDriver_Init(UserCallback);
 
     // wait for callback
-    while (driver_busy)
-    {
-    }
+    while (driver_busy) {;}
 
     printf("Flash initialized\n");
 }
@@ -93,9 +89,7 @@ ErrorCode_t FlashWrite(uint32_t address, uint8_t *data, uint32_t data_len)
         }
 
         // Wait for callback indicating that driver is ready
-        while (driver_busy)
-        {
-        }
+        while (driver_busy) {;}
 
         write_ptr += data_to_write.size;
     }
