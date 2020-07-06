@@ -1,6 +1,8 @@
 #ifndef __FLASH_H__
 #define __FLASH_H__
 
+#include <stdint.h>
+
 #include "flash_driver.h"
 
 /*

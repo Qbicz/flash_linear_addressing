@@ -20,6 +20,8 @@ void FlashDriver_Init(FlashDriverCallback callback)
     {
         flash.callback = callback;
     }
+
+    flash.callback(SUCCESS);
 }
 
 ErrorCode_t FlashDriver_Write(uint32_t page_number, S_Array_t data, FlashDriverCallback callback)
@@ -44,7 +46,6 @@ ErrorCode_t FlashDriver_Write(uint32_t page_number, S_Array_t data, FlashDriverC
     }
 
     // Write flash
-    // (done by 3rd party)
 
     flash.callback(SUCCESS);
     flash.pending = false;

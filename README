@@ -11,6 +11,6 @@ mkdir build
 cd build
 cmake ..
 make
-./flash
+./flash_project
 ```
 

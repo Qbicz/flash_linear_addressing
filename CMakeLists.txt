@@ -14,4 +14,5 @@ add_library(
     )
 
 add_executable(${PROJECT_NAME} "flash_example.c")
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
 target_link_libraries(${PROJECT_NAME} PRIVATE flash flash_driver)

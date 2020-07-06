@@ -3,7 +3,7 @@
 
 #include "flash/flash.h"
 
-#define TEST_DATA_LEN 4000
+#define TEST_DATA_LEN 6000
 
 int main(void)
 {

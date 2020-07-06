@@ -1,19 +1,32 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <stdatomic.h>
 
 #include "flash.h"
 
-void user_callback(ErrorCode_t code)
+_Atomic(bool) driver_busy = ATOMIC_VAR_INIT(false);
+
+void UserCallback(ErrorCode_t code)
 {
     // Note: Called from separate context.
 
-    printf("callback: error %d\n", code);
+    printf("callback: error code %d\n", code);
 
     // set a flag to indicate operation done
+    atomic_flag_clear(&driver_busy);
 }
 
 void FlashInit()
 {
-    FlashDriver_Init(user_callback);
+    atomic_flag_test_and_set(&driver_busy);
+    FlashDriver_Init(UserCallback);
+
+    // wait for callback
+    while (driver_busy)
+    {
+    }
+
+    printf("Flash initialized\n");
 }
 
 ErrorCode_t FlashWrite(uint32_t address, uint8_t *data, uint32_t data_len)
@@ -67,10 +80,11 @@ ErrorCode_t FlashWrite(uint32_t address, uint8_t *data, uint32_t data_len)
 
         data_to_write.data = write_ptr;
 
-        // check if operation pending
+        atomic_flag_test_and_set(&driver_busy);
 
-        printf("Writing page %d, len %d, data @ %p, write_ptr %p\n", page, data_to_write.size, data_to_write.data, write_ptr);
-        err = FlashDriver_Write(page, data_to_write, user_callback);
+        printf("Writing page %d, len %d, data @ %p, write_ptr %p\n",
+                page, data_to_write.size, data_to_write.data, write_ptr);
+        err = FlashDriver_Write(page, data_to_write, UserCallback);
         if (err != SUCCESS)
         {
             printf("Flash write failed with code %d\n", err);
@@ -78,8 +92,10 @@ ErrorCode_t FlashWrite(uint32_t address, uint8_t *data, uint32_t data_len)
             return err;
         }
 
-        // wait for callback, blocking
-        // callback should use semaphore to signal that flash is ready. Then we return
+        // Wait for callback indicating that driver is ready
+        while (driver_busy)
+        {
+        }
 
         write_ptr += data_to_write.size;
     }
