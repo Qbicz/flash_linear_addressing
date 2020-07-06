@@ -84,7 +84,8 @@ ErrorCode_t FlashWrite(uint32_t address, uint8_t *data, uint32_t data_len)
         if (err != SUCCESS)
         {
             printf("Flash write failed with code %d\n", err);
-            // Not needed to wait for callback, it's only scheduled when API returns SUCCESS)
+            // Not needed to wait for callback, it's only scheduled when
+            // API returns SUCCESS
             return err;
         }
 

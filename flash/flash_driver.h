@@ -63,4 +63,4 @@ ErrorCode_t FlashDriver_Write(uint32_t page_number, S_Array_t data, FlashDriverC
  * You may use C11.
  */
 
-#endif /* __FLASH_H__ */
+#endif /* __FLASH_DRIVER_H__ */
