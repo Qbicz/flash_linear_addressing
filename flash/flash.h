@@ -4,9 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// You have simplified flash region here:
-#define PAGE_SIZE 2048U
-
 /**
  * Flash region:
  * 0x0.................................................................20480U
@@ -16,6 +13,9 @@
  *
  * There is defined interface below:
  */
+#define PAGE_SIZE           2048U
+#define FLASH_REGION_BEGIN  0U
+#define FLASH_REGION_END    20480U
 
 typedef struct S_Array_type
 {
@@ -37,12 +37,6 @@ typedef enum ErrorCode_type
  * @attention Such callback is always called on another context than Your code executes
  */
 typedef void (*FlashDriverCallback)(ErrorCode_t code);
-
-typedef struct FlashControlBlock_type
-{
-    FlashDriverCallback callback; ///< Function called after flash operation has finished
-    bool pending;
-} Flash_t;
 
 /**
  * @brief Initialize module async
