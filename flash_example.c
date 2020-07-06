@@ -1,27 +1,25 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "flash_driver/flash_driver.h"
+#include "flash/flash.h"
 
-void user_callback(ErrorCode_t code)
-{
-    printf("callback: error %d\n", code);
-}
+#define TEST_DATA_LEN 4000
 
 int main(void)
 {
     // printf only used for demo/testing purpose, on microcontroller disable stdio.h and use dedicated logging
     printf("Flash example start\n");
 
-    uint32_t page_number = 12;
-    S_Array_t data_to_write = {0};
+    FlashInit();
 
-    FlashDriver_Init(user_callback);
-    ErrorCode_t err = FlashDriver_Write(page_number, data_to_write, user_callback);
-    if (err != SUCCESS)
+    // Generate data
+    uint8_t data[TEST_DATA_LEN];
+    for (int i = 0; i < TEST_DATA_LEN; i++)
     {
-        printf("Flash write failed with code %d\n", err);
+        data[i] = i % 0xFF;
     }
+
+    FlashWrite(1000, data, TEST_DATA_LEN);
 
     return 0;
 }
